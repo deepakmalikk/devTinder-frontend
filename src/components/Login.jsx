@@ -87,6 +87,7 @@ const Login = () => {
               <input
                 type="text"
                 value={emailId}
+                placeholder="Enter Email ID"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setEmailId(e.target.value)}
               />
@@ -98,6 +99,7 @@ const Login = () => {
               <input
                 type="password"
                 value={password}
+                placeholder="Enter Password"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setPassword(e.target.value)}
               />
