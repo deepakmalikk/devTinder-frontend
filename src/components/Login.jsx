@@ -1,11 +1,12 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addUser, removeUser } from '../utils/userSlice'
-import { useNavigate } from 'react-router-dom'
-import { baseURL } from '../utils/constent'
+import axios from "axios";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import { baseURL } from "../utils/constent"; // ensure this is set to backend + "/api"
+
 const Login = () => {
-   const [emailId, setEmailId] = useState("");
+  const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,10 +15,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  
- const handleLogin = async () => {
+  const handleLogin = async () => {
+    setError("");
     try {
       const res = await axios.post(
+        // baseURL should be like: "https://devtinder-backend-1-f97o.onrender.com/api"
         baseURL + "/login",
         {
           emailId,
@@ -25,24 +27,41 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      dispatch(addUser(res.data));
+
+      // backend might return user as res.data or res.data.data depending on implementation
+      const userData = res?.data?.data ?? res?.data ?? null;
+
+      if (!userData) {
+        throw new Error("Invalid response from server");
+      }
+
+      dispatch(addUser(userData));
       return navigate("/feed");
     } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+      console.error("Login error:", err);
+      setError(err?.response?.data || err.message || "Something went wrong");
     }
   };
 
   const handleSignUp = async () => {
+    setError("");
     try {
       const res = await axios.post(
         baseURL + "/signup",
         { firstName, lastName, emailId, password },
         { withCredentials: true }
       );
-      dispatch(addUser(res.data.data));
+
+      const userData = res?.data?.data ?? res?.data ?? null;
+      if (!userData) {
+        throw new Error("Invalid response from server");
+      }
+
+      dispatch(addUser(userData));
       return navigate("/profile");
     } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+      console.error("Signup error:", err);
+      setError(err?.response?.data || err.message || "Something went wrong");
     }
   };
 
@@ -53,7 +72,7 @@ const Login = () => {
           <h2 className="card-title justify-center">
             {isLoginForm ? "Login" : "Sign Up"}
           </h2>
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-4">
             {!isLoginForm && (
               <>
                 <label className="form-control w-full max-w-xs my-2">
@@ -119,9 +138,7 @@ const Login = () => {
             className="m-auto cursor-pointer py-2"
             onClick={() => setIsLoginForm((value) => !value)}
           >
-            {isLoginForm
-              ? "New User? Signup Here"
-              : "Existing User? Login Here"}
+            {isLoginForm ? "New User? Signup Here" : "Existing User? Login Here"}
           </p>
         </div>
       </div>
