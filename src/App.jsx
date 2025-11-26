@@ -7,6 +7,10 @@ import { Provider } from "react-redux";
 import Feed from "./components/Feed";
 import Connection from "./components/Connection";
 import Request from "./components/Requests";
+import Chat from "./components/Chat";
+
+
+
 
 function App() {
   return (
@@ -19,6 +23,9 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="connection" element={<Connection />} />
           <Route path="request" element={<Request />} />
+          <Route path="chat/:targetUserId" element={<Chat />} />
+
+
          
         </Route>
       </Routes>

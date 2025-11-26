@@ -5,6 +5,7 @@ import { addConnections } from '../utils/connectionSlice';
 import { useDispatch } from 'react-redux';
 import  { useEffect }  from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 const Connection = () => {
     
 
@@ -45,11 +46,13 @@ const Connection = () => {
                      <h1 className='font-bold uppercase'>{firstName} {lastName}</h1>
                    
                         <p>{about}</p>
+                        
+                        <Link to={`/chat/${_id}`}><button className=" btn btn-primary">Chat</button></Link>
                     </div>
+                  
+                
                    
-           
-          
-             </div>
+                </div>
         )})}
     
     </div>
