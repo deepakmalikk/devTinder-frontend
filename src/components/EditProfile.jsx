@@ -4,7 +4,7 @@ import UserCard from './UserCard'
 import Profile from './Profile'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../utils/userSlice'
-import { baseURL } from '../utils/constent'
+import { API_URL } from '../utils/constent'
 import axios from 'axios'
  
 const EditProfile = ({user}) => {
@@ -18,7 +18,7 @@ const EditProfile = ({user}) => {
   const dispatch = useDispatch()
     const clickHandler = async()=>{
         try{
-            const response = await axios.patch(baseURL+"/profile/edit", {
+            const response = await axios.patch(API_URL+"/profile/edit", {
                 firstName,
                 lastName,
                 about,

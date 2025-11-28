@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { baseURL } from '../utils/constent'
+import { API_URL } from '../utils/constent'
 import { useNavigate } from 'react-router-dom'
 import { removeUser } from '../utils/userSlice'
 
@@ -13,7 +13,7 @@ const NavBar = () => {
   
     const handleLogout = async() => {
         try {
-          const response = await axios.post(baseURL+"/logout",
+          const response = await axios.post(API_URL+"/logout",
             {}, 
             {withCredentials: true}); 
           
@@ -21,7 +21,7 @@ const NavBar = () => {
           navigate("/login")
         } catch (error) {
           console.log(error)
-        }
+        } 
     }
     return (handleLogout &&(
      <div>

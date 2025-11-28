@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
-import { baseURL } from "../utils/constent"; // ensure this is set to backend + "/api"
+import { API_URL } from "../utils/constent"; // ensure this is set to backend + "/api"
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const res = await axios.post(
         // baseURL should be like: "https://devtinder-backend-1-f97o.onrender.com/api"
-        baseURL + "/login",
+        API_URL + "/login",
         {
           emailId,
           password,
@@ -47,7 +47,7 @@ const Login = () => {
     setError("");
     try {
       const res = await axios.post(
-        baseURL + "/signup",
+        API_URL + "/signup",
         { firstName, lastName, emailId, password },
         { withCredentials: true }
       );

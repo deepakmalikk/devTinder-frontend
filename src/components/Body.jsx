@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Footer from './Footer'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { baseURL } from '../utils/constent'
+import { API_URL } from '../utils/constent'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../utils/userSlice'
 import { useEffect } from 'react'
@@ -18,7 +18,7 @@ const Body = () => {
       if(userData){
         return;
       }
-      const response = await axios.get(baseURL+"/profile/view", {withCredentials: true})
+      const response = await axios.get(API_URL+"/profile/view", {withCredentials: true})
       dispatch(addUser(response.data))
     }
 

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { baseURL } from "../utils/constent"
+import { API_URL } from "../utils/constent"
 import { removeFeed } from "../utils/feedSlice"
 import { useDispatch } from "react-redux"
 
@@ -9,7 +9,7 @@ const userCard = ({user}) => {
   const dispatch = useDispatch();
   const sendRequestHandler = async(status,requestId)=>{
     try {
-      const response = await axios.post(baseURL+"/request/send/"+status+"/"+requestId ,{}, {withCredentials: true});
+      const response = await axios.post(API_URL+"/request/send/"+status+"/"+requestId ,{}, {withCredentials: true});
       dispatch(removeFeed(requestId))
     } catch (error) {
       console.log(error)
