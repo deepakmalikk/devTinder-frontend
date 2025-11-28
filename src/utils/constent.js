@@ -6,4 +6,4 @@
 export const baseURL = "https://devtinder-backend-1-f97o.onrender.com/api";
 
 
-console.log(baseURL);
+console.log(baseURL);   
