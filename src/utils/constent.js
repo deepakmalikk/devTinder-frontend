@@ -1,9 +1,5 @@
+// REST APIs
+export const API_URL = "https://devtinder-backend-1-f97o.onrender.com/api";
 
-//Production
-//export const baseURL = "/api";
-
-// dev
-export const baseURL = "https://devtinder-backend-1-f97o.onrender.com/api";
-
-
-console.log(baseURL);   
+// Socket.IO (NO /api)
+export const SOCKET_URL = "https://devtinder-backend-1-f97o.onrender.com";
