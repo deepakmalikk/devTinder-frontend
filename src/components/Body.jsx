@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Footer from './Footer'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { API_URL } from '../utils/constent'
+import { BASE_URL } from '../utils/constent'
 import { useDispatch } from 'react-redux'
 import { addUser } from '../utils/userSlice'
 import { useEffect } from 'react'
@@ -18,13 +18,15 @@ const Body = () => {
       if(userData){
         return;
       }
-      const response = await axios.get(API_URL+"/profile/view", {withCredentials: true})
+      const response = await axios.get(BASE_URL+"/profile/view", {withCredentials: true})
       dispatch(addUser(response.data))
     }
 
     catch (error) {
       if (error.response && error.response.status === 401) {
-        navigate("/login");
+        if (location.pathname !== "/login") {
+          navigate("/login");
+        }
       } else {
         console.log(error);
       }
@@ -33,8 +35,9 @@ const Body = () => {
   };
 
   useEffect(()=>{
+    if (location.pathname === "/login") return;
     fetchUser();
-  },[])
+  },[location.pathname])
 
   return (
     <div>
