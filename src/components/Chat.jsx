@@ -46,7 +46,7 @@ const Chat = () => {
     });
 
     socket.on("messageRecieved", ({firstName,lastName,text}) => {
-      console.log(firstName + " :  " + text);
+       
       setMessages((messages)=>[...messages,{firstName,lastName,text}])
     });
     
@@ -92,16 +92,26 @@ return (
         })}
 
       </div>
-      <div className="p-5 border-t border-gray-600 flex items-center gap-2">
-        <input
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          className="flex-1 border border-gray-500 text-black rounded p-2"
-        />
-        <button onClick={sendMessage} className="btn btn-secondary">
-          Send
-        </button>
-      </div>
+      <div className="p-3 sm:p-5 border-t border-gray-600 
+  flex flex-col sm:flex-row 
+  items-stretch sm:items-center 
+  gap-2"
+>
+  <input
+    value={newMessage}
+    onChange={(e) => setNewMessage(e.target.value)}
+    className="flex-1 border border-gray-500 text-black rounded p-2 text-sm sm:text-base"
+    placeholder="Type a message..."
+  />
+
+  <button
+    onClick={sendMessage}
+    className="btn btn-secondary w-full sm:w-auto"
+  >
+    Send
+  </button>
+</div>
+
     </div>
   );
 };

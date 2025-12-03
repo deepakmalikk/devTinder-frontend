@@ -6,9 +6,10 @@ import appStore from "./utils/appStore";
 import { Provider } from "react-redux";
 import Feed from "./components/Feed";
 import Connection from "./components/Connection";
+import About from "./components/About";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 import Request from "./components/Requests";
 import Chat from "./components/Chat";
-
 
 
 
@@ -24,7 +25,8 @@ function App() {
           <Route path="connection" element={<Connection />} />
           <Route path="request" element={<Request />} />
           <Route path="chat/:targetUserId" element={<Chat />} />
-
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
 
          
         </Route>

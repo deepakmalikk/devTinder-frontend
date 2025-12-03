@@ -50,23 +50,55 @@ const Requests = () => {
             console.log(request);
            const requestId = request._id;
          
-            return(
-                <div key={_id} className='flex item-center justify-center space-in-between m-auto p-4 border-2 rounded-lg w-1/2'>
-                    <div>  
-                        <img className="w-20 h-20 rounded-full" src={photoUrl} alt="userPhoto" />
-                    </div>
-                    <div className='text-left mx-4'> 
-                     <h1 className='font-bold uppercase'>{firstName} {lastName}</h1>
-                   
-                        <p>{about}</p>
-                    </div>
-                   
-           <div className='flex  item-center '>
-            <button className="btn btn-info mx-2" onClick={()=>requestHandler("rejected",requestId)}>Reject</button>
-            <button className="btn btn-success mx-2" onClick={()=>requestHandler("accepted",requestId)}>Accept</button></div>
-          
-             </div>
-        )})}
+     return (
+  <div
+    key={_id}
+    className="
+      flex flex-col md:flex-row
+      items-center md:items-center
+      justify-between
+      gap-4
+      m-auto mb-4
+      p-4
+      border-2 rounded-lg
+      w-1/2 sm:w-3/4 md:w-2/3 lg:w-1/2
+    "
+  >
+    
+    <div className="flex-shrink-0">
+      <img
+        className="w-20 h-20 rounded-full object-cover"
+        src={photoUrl}
+        alt="userPhoto"
+      />
+    </div>
+
+   
+    <div className="text-center md:text-left mx-0 md:mx-4 flex-1">
+      <h1 className="font-bold uppercase text-lg">
+        {firstName} {lastName}
+      </h1>
+      <p className="text-sm mt-1">{about}</p>
+    </div>
+
+  
+    <div className="flex flex-col sm:flex-row items-center gap-2 mt-2 md:mt-0">
+      <button
+        className="btn btn-info w-full sm:w-auto"
+        onClick={() => requestHandler("rejected", requestId)}
+      >
+        Reject
+      </button>
+      <button
+        className="btn btn-success w-full sm:w-auto"
+        onClick={() => requestHandler("accepted", requestId)}
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+);
+})}
     
     </div>
 
