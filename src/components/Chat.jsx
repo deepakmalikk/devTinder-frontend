@@ -23,7 +23,6 @@ const Chat = () => {
       firstName: senderId?.firstName, 
       lastName: senderId?.lastName, 
       text,
-      timestamp: Date.now(),
      }
       
     });
@@ -48,7 +47,7 @@ const Chat = () => {
 
     socket.on("messageRecieved", ({firstName,lastName,text}) => {
       console.log(firstName + " :  " + text);
-      setMessages((messages)=>[...messages,{firstName,lastName,text,timestamp: Date.now(),}])
+      setMessages((messages)=>[...messages,{firstName,lastName,text}])
     });
     
    return () =>{
