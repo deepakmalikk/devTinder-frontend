@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useParams } from "react-router-dom";
 import socket from "../utils/socket";          
 import { useSelector } from "react-redux";
@@ -89,7 +89,7 @@ return (
                 "chat "+ (user.firstName ===msg.firstName?
                "chat-end"
                : "chat-start")}>
-              <div className="chat-header">
+              <div className="chat-header">           
                 {`${msg.firstName || ""} ${msg.lastName || ""}`}
                 
               </div>
