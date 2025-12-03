@@ -1,9 +1,10 @@
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
-import socket from "../utils/socket";          
+import socket from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constent";
+
 const Chat = () => {
   const { targetUserId } = useParams();
   const [messages, setMessages] = useState([]);
@@ -11,29 +12,37 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const userId = user?._id;
 
+  const chatContainerRef = useRef(null);
+
   const fetchChatMessages = async () => {
-    const chat = await axios.get(BASE_URL+"/chat/"+targetUserId, {
-      withCredentials: true,
-    })
-    
-   console.log(chat.data.messages)
-   const chatMessages = chat?.data?.messages.map(msg =>{
-   const {senderId,text} =msg;
-    return { 
-      firstName: senderId?.firstName, 
-      lastName: senderId?.lastName, 
-      text,
-     }
-      
-    });
-    setMessages(chatMessages);
-   }
+    try {
+      const chat = await axios.get(`${BASE_URL}/chat/${targetUserId}`, {
+        withCredentials: true,
+      });
 
-  
+      console.log("Initial messages:", chat.data.messages);
 
-  useEffect(()=>{
-    fetchChatMessages()
-  },[])
+      const chatMessages =
+        chat?.data?.messages?.map((msg) => {
+          const { senderId, text } = msg;
+          return {
+            firstName: senderId?.firstName,
+            lastName: senderId?.lastName,
+            text,
+          };
+        }) || [];
+
+      setMessages(chatMessages);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+    }
+  };
+
+  // 1) Load history on mount
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
+
   // 2) Set up socket listeners
   useEffect(() => {
     if (!userId || !targetUserId) return;
@@ -45,61 +54,74 @@ const Chat = () => {
       targetUserId,
     });
 
-    socket.on("messageRecieved", ({firstName,lastName,text}) => {
-      console.log(firstName + " :  " + text);
-      setMessages((messages)=>[...messages,{firstName,lastName,text}])
-    });
-    
-   return () =>{
-    socket.disconnect(); 
-   } 
-  
-  }, [userId, targetUserId,]);
+    const handleMessageReceived = ({ firstName, lastName, text }) => {
+      console.log(firstName + " : " + text);
+      setMessages((prev) => [...prev, { firstName, lastName, text }]);
+    };
 
-  // 3) Send message via socket
+    socket.on("messageRecieved", handleMessageReceived);
+
+    // ❗ Do NOT disconnect the socket here, just remove this listener
+    return () => {
+      socket.off("messageRecieved", handleMessageReceived);
+    };
+  }, [userId, targetUserId, user.firstName]);
+
+  // 3) Send message (with optimistic UI update)
   const sendMessage = () => {
-    
-    socket.emit("sendMessage", {
+    if (!newMessage.trim()) return;
+
+    const msg = {
       firstName: user.firstName,
       lastName: user.lastName,
+      text: newMessage,
+    };
+
+    // 👉 Show my own message immediately
+    setMessages((prev) => [...prev, msg]);
+
+    // send to server (which will store in DB and also emit to others)
+    socket.emit("sendMessage", {
+      ...msg,
       userId,
       targetUserId,
-      text: newMessage,
     });
 
     setNewMessage("");
   };
 
-const messagesEndRef = useRef(null);
-const scrollToBottom = () => {
-  messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-};
-useEffect(() => {
-  scrollToBottom();
-}, [messages]);
+  // 4) Auto-scroll whenever messages change
+  useEffect(() => {
+    if (!chatContainerRef.current) return;
 
+    chatContainerRef.current.scrollTop =
+      chatContainerRef.current.scrollHeight;
+  }, [messages]);
 
-return (
+  return (
     <div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col">
       <h1 className="p-5 border-b border-gray-600">Chat</h1>
-      <div className="flex-1 overflow-scroll p-5">
-        {messages.map((msg, index) => {
-          return   (
-              <div key={index} className={
-                "chat "+ (user.firstName ===msg.firstName?
-               "chat-end"
-               : "chat-start")}>
-              <div className="chat-header">           
-                {`${msg.firstName || ""} ${msg.lastName || ""}`}
-                
-              </div>
-              <div className="chat-bubble">{msg.text}</div>
-            </div>
-          );
-        })}
-        <div ref={messagesEndRef} />
 
+      <div
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-5"
+      >
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={
+              "chat " +
+              (user.firstName === msg.firstName ? "chat-end" : "chat-start")
+            }
+          >
+            <div className="chat-header">
+              {`${msg.firstName || ""} ${msg.lastName || ""}`}
+            </div>
+            <div className="chat-bubble">{msg.text}</div>
+          </div>
+        ))}
       </div>
+
       <div className="p-5 border-t border-gray-600 flex items-center gap-2">
         <input
           value={newMessage}
