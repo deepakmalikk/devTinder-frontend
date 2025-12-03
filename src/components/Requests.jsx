@@ -47,7 +47,7 @@ const Requests = () => {
     
         {request.map((request)=>{
             const { _id, firstName, lastName, about, photoUrl} = request.fromUserId;
-            console.log(request);
+      
            const requestId = request._id;
          
      return (
