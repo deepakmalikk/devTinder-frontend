@@ -13,7 +13,7 @@ const Chat = () => {
   const userId = user?._id;
 
   const chatContainerRef = useRef(null);
-
+  const inputRef = useRef(null);
   const fetchChatMessages = async () => {
     try {
       const chat = await axios.get(`${BASE_URL}/chat/${targetUserId}`, {
@@ -69,12 +69,14 @@ const Chat = () => {
 
   // 3) Send message (with optimistic UI update)
   const sendMessage = () => {
-    if (!newMessage.trim()) return;
+    const text = inputRef.current?.value || "";
+
+    if (!text.trim()) return;
 
     const msg = {
       firstName: user.firstName,
       lastName: user.lastName,
-      text: newMessage,
+      text,
     };
 
     // 👉 Show my own message immediately
@@ -87,7 +89,7 @@ const Chat = () => {
       targetUserId,
     });
 
-    setNewMessage("");
+inputRef.current.value = "";
   };
 
   // 4) Auto-scroll whenever messages change
@@ -124,6 +126,7 @@ const Chat = () => {
 
       <div className="p-5 border-t border-gray-600 flex items-center gap-2">
         <input
+          ref={inputRef}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           className="flex-1 border border-gray-500 text-black rounded p-2"
