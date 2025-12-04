@@ -16,8 +16,12 @@ const NavBar = () => {
           const response = await axios.post(BASE_URL+"/logout",
             {}, 
             {withCredentials: true}); 
+            dispatch(removeUser());        // clear logged-in user
+            dispatch(clearFeed());         // clear feed data
+            dispatch(removeConnections()); // clear connections
+            dispatch(clearRequest());      // clear requests
           
-          dispatch(removeUser())
+        
           navigate("/login")
         } catch (error) {
           console.log(error)
