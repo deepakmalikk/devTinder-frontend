@@ -5,7 +5,7 @@ import axios from 'axios'
 import { BASE_URL } from '../utils/constent'
 import { useNavigate } from 'react-router-dom'
 import { removeUser } from '../utils/userSlice'
-
+import logo from '../assets/devtinder-logo.svg'
 const NavBar = () => {
   const user = useSelector((store)=>store.user)
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const NavBar = () => {
           {/* Left: Logo */}
           <div className="flex-1">
             <Link to="/feed" className="btn btn-ghost text-xl">
-              devTinder
+              <img src={logo} alt="devTinder" className="h-8" />
             </Link>
           </div>
 

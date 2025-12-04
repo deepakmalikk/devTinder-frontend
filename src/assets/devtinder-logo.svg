@@ -1,0 +1,59 @@
+<svg
+  width="180"
+  height="40"
+  viewBox="0 0 180 40"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Flame icon -->
+  <g transform="translate(0, 2)">
+    <path
+      d="M18 2C18 2 13 7 13 12C13 14.5 14.2 16.7 16.3 18C15.8 17 15.5 15.9 15.5 14.8C15.5 11.7 17.3 9.4 19 7.5C20.7 9.4 22.5 11.7 22.5 14.8C22.5 15.9 22.2 17 21.7 18C23.8 16.7 25 14.5 25 12C25 7 20 2 20 2L19 3L18 2Z"
+      fill="#F97316"
+    />
+    <path
+      d="M19 11C17 13 17 14.7 17 15.5C17 17.4 18.4 19 20 19C21.6 19 23 17.4 23 15.5C23 14.7 23 13 21 11C21 12 20.5 12.7 20 13.2C19.5 12.7 19 12 19 11Z"
+      fill="#FDBA74"
+    />
+  </g>
+
+  <!-- Left angle bracket "<" -->
+  <path
+    d="M40 10L32 20L40 30"
+    stroke="#94A3B8"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right angle bracket ">" -->
+  <path
+    d="M54 10L62 20L54 30"
+    stroke="#94A3B8"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- devTinder text -->
+  <text
+    x="72"
+    y="25"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#F97316"
+  >
+    dev
+  </text>
+  <text
+    x="105"
+    y="25"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="500"
+    fill="#E5E7EB"
+  >
+    Tinder
+  </text>
+</svg>
