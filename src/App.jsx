@@ -28,7 +28,7 @@ function App() {
           <Route path="chat/:targetUserId" element={<Chat />} />
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
-
+          <Route path="*" element={<Navigate to="feed" replace />} />
          
         </Route>
       </Routes>
