@@ -6,7 +6,7 @@ return (
 
      
       <p className="text-center sm:text-left text-sm">
-        © 2025 DevTinder Web Application — All Rights Reserved
+        © 2025 devTinder Web Application — All Rights Reserved
       </p>
 
 
