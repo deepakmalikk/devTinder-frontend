@@ -49,7 +49,7 @@ const NavBar = () => {
           </div>
 
           {/* Center: Main nav links (Feed, Connections, Requests) */}
-          <div className="hidden sm:flex gap-4 mr-4">
+          <div className="hidden sm:flex gap-4 mr-6">
             <Link
               to="/feed"
               className={`btn btn-ghost btn-sm ${
