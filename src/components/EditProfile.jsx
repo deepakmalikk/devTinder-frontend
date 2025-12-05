@@ -43,6 +43,11 @@ const EditProfile = ({user}) => {
     
 return (
   <>
+    <div className="text-center my-30">
+    <h2 className="text-lg font-semibold mb-2 text-center opacity-80">
+          Profile Preview (How others see you)
+        </h2>
+    </div>
     <div
       className="
         flex flex-col lg:flex-row 
@@ -53,9 +58,7 @@ return (
         px-4
       "
     >
-       <h2 className="text-lg font-semibold mb-2 text-center opacity-80">
-          Profile Preview (How others see you)
-        </h2>
+       
       {/* FORM */}
       <div className="w-full max-w-sm">
         <fieldset className="fieldset bg-base-300 border-base-300 rounded-box border p-4">
