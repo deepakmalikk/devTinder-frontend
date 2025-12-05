@@ -104,7 +104,11 @@ return (
       </div>
 
  
-      <div className="w-full max-w-md flex justify-center ">
+      <div className="w-full max-w-md flex flex-col items-center mt-6">
+        <h2 className="text-lg font-semibold mb-2 text-center opacity-80">
+          Profile Preview (How others see you)
+        </h2>
+
         <UserCard
           user={{
             firstName,
@@ -114,6 +118,7 @@ return (
           }}
         />
       </div>
+
     </div>
 
     <div className="toast toast-top toast-center">
