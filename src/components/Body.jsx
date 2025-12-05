@@ -1,4 +1,3 @@
-// src/components/Body.jsx
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -13,7 +12,6 @@ const Body = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-
   const [authChecking, setAuthChecking] = useState(false);
   const [authCheckedOnce, setAuthCheckedOnce] = useState(false);
 
@@ -25,7 +23,6 @@ const Body = () => {
       });
       dispatch(addUser(response.data));
     } catch (error) {
-      // If unauthorized, clear user
       if (error.response && error.response.status === 401) {
         dispatch(removeUser());
       } else {
@@ -37,16 +34,14 @@ const Body = () => {
     }
   };
 
-  // 1) On first load in ANY tab, check if the user is logged in (cookie-based)
   useEffect(() => {
     if (!authCheckedOnce) {
       fetchUser();
     }
   }, [authCheckedOnce]);
 
-  // 2) Protect routes: if not logged in and not on /login, go to /login
   useEffect(() => {
-    if (!authCheckedOnce) return; // wait until we checked auth at least once
+    if (!authCheckedOnce) return;
 
     const isLoginRoute = location.pathname === "/login";
 
@@ -55,7 +50,6 @@ const Body = () => {
     }
   }, [userData, location.pathname, authCheckedOnce, navigate]);
 
-  // 3) If logged in and somehow on /login, redirect to /feed
   useEffect(() => {
     if (!authCheckedOnce) return;
 
@@ -66,7 +60,6 @@ const Body = () => {
     }
   }, [userData, location.pathname, authCheckedOnce, navigate]);
 
-  // Optional: simple loader while checking auth
   if (!authCheckedOnce && authChecking) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -76,9 +69,14 @@ const Body = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       {userData && <NavBar />}
-      <Outlet />
+
+      {/* Main content grows and pushes footer down */}
+      <main className="flex-1">
+        <Outlet />
+      </main>
+
       <Footer />
     </div>
   );
