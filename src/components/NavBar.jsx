@@ -65,7 +65,7 @@ const NavBar = () => {
                 isActive("/connection") ? "btn-active" : ""
               }`}
             >
-              Connections
+              Matches
             </Link>
 
             <Link
@@ -79,7 +79,7 @@ const NavBar = () => {
           </div>
 
           {/* Right: User section */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* Welcome text (hidden on very small screens) */}
             <p className="hidden sm:flex text-sm md:text-lg items-center">
               Welcome,&nbsp;
