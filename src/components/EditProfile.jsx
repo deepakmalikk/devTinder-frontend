@@ -43,7 +43,7 @@ const EditProfile = ({user}) => {
     
 return (
   <>
-    <div className="text-center my-20">
+    <div className="text-center my-10">
     <h2 className="text-lg font-semibold mb-2 text-center opacity-80">
           Profile Preview (How others see you)
         </h2>
