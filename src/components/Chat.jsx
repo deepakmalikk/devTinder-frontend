@@ -62,30 +62,18 @@ const Chat = () => {
     };
   }, [userId, targetUserId, user?.firstName]);
 
-  // 3) Send message via socket + optimistic UI
+  // 3) Send message via socket (no optimistic push)
   const sendMessage = () => {
     const trimmed = newMessage.trim();
     if (!trimmed) return;
 
-    const outgoing = {
+    socket.emit("sendMessage", {
       firstName: user.firstName,
       lastName: user.lastName,
       userId,
       targetUserId,
       text: trimmed,
-    };
-
-    // 🔥 Optimistic update: show message immediately
-    setMessages((prev) => [
-      ...prev,
-      {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        text: trimmed,
-      },
-    ]);
-
-    socket.emit("sendMessage", outgoing);
+    });
 
     setNewMessage("");
   };
