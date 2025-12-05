@@ -43,7 +43,7 @@ const EditProfile = ({user}) => {
     
 return (
   <>
-    <div className="text-center my-30">
+    <div className="text-center my-20">
     <h2 className="text-lg font-semibold mb-2 text-center opacity-80">
           Profile Preview (How others see you)
         </h2>
@@ -54,7 +54,7 @@ return (
         justify-center 
         items-center 
         gap-8 
-        my-10 
+        my-8 
         px-4
       "
     >
