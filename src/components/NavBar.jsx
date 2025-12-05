@@ -30,73 +30,128 @@ const NavBar = () => {
           console.log(error)
         } 
     }
-   return (
-  handleLogout && (
+  
+
+  // If no user, don't show navbar
+  if (!user) return null;
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
     <div className="w-full">
       <div className="navbar bg-base-300 shadow-sm">
-        {/* Wrapper to center content and add side padding */}
         <div className="w-full max-w-6xl mx-auto px-4 flex justify-between items-center">
-          
           {/* Left: Logo */}
-          <div className="flex-1">
-            <Link to="/feed" className="btn btn-ghost text-xl">
+          <div className="flex items-center gap-2 flex-1">
+            <Link to="/feed" className="btn btn-ghost text-xl flex items-center gap-2">
               <img src={logo} alt="devTinder" className="h-8" />
             </Link>
           </div>
 
+          {/* Center: Main nav links (Feed, Connections, Requests) */}
+          <div className="hidden sm:flex gap-4 mr-4">
+            <Link
+              to="/feed"
+              className={`btn btn-ghost btn-sm ${
+                isActive("/feed") ? "btn-active" : ""
+              }`}
+            >
+              Home
+            </Link>
+
+            <Link
+              to="/connection"
+              className={`btn btn-ghost btn-sm ${
+                isActive("/connection") ? "btn-active" : ""
+              }`}
+            >
+              Connections
+            </Link>
+
+            <Link
+              to="/request"
+              className={`btn btn-ghost btn-sm ${
+                isActive("/request") ? "btn-active" : ""
+              }`}
+            >
+              Requests
+            </Link>
+          </div>
+
           {/* Right: User section */}
-          {user && (
-            <div className="flex items-center gap-2">
-              {/* Hide welcome text on very small screens */}
-              <p className="hidden sm:flex text-sm md:text-lg items-center">
-                Welcome,&nbsp;
-                <span className="font-semibold">{user.firstName}</span>
-              </p>
+          <div className="flex items-center gap-2">
+            {/* Welcome text (hidden on very small screens) */}
+            <p className="hidden sm:flex text-sm md:text-lg items-center">
+              Welcome,&nbsp;
+              <span className="font-semibold">{user.firstName}</span>
+            </p>
 
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="btn btn-ghost btn-circle avatar"
-                >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="user Photo"
-                      src={user.photoUrl}
-                    />
-                  </div>
+            {/* Avatar dropdown: only Profile + Logout */}
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  <img alt="user Photo" src={user.photoUrl} />
                 </div>
-
-                <ul
-                  tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
-                >
-                  <li>
-                    <Link to="/profile" className="justify-between">
-                      Profile
-                      <span className="badge">New</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/connection">Connection</Link>
-                  </li>
-                  <li>
-                    <Link to="/request">Request</Link>
-                  </li>
-                  <li>
-                    {/* Use button semantics for accessibility */}
-                    <button onClick={handleLogout}>Logout</button>
-                  </li>
-                </ul>
               </div>
+
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+              >
+                <li>
+                  <Link to="/profile" className="justify-between">
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              </ul>
             </div>
-          )}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Mobile nav links below navbar */}
+      <div className="sm:hidden bg-base-300 border-t border-base-200">
+        <div className="flex justify-around py-2">
+          <Link
+            to="/feed"
+            className={`btn btn-ghost btn-xs ${
+              isActive("/feed") ? "btn-active" : ""
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            to="/connection"
+            className={`btn btn-ghost btn-xs ${
+              isActive("/connection") ? "btn-active" : ""
+            }`}
+          >
+            Connections
+          </Link>
+          <Link
+            to="/request"
+            className={`btn btn-ghost btn-xs ${
+              isActive("/request") ? "btn-active" : ""
+            }`}
+          >
+            Requests
+          </Link>
         </div>
       </div>
     </div>
-  )
-);
+  );
+};
 
-}
+
+
+
 
 export default NavBar;
