@@ -1,11 +1,11 @@
 // src/components/Body.jsx
 import NavBar from "./NavBar";
 import Footer from "./Footer";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constent";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { addUser, removeUser } from "../utils/userSlice";
 import { useEffect, useState } from "react";
 
 const Body = () => {
@@ -13,47 +13,61 @@ const Body = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(false);
+
+  const [authChecking, setAuthChecking] = useState(false);
+  const [authCheckedOnce, setAuthCheckedOnce] = useState(false);
 
   const fetchUser = async () => {
     try {
-      setLoading(true);
+      setAuthChecking(true);
       const response = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
       dispatch(addUser(response.data));
     } catch (error) {
-      // If unauthorized, force login
+      // If unauthorized, clear user
       if (error.response && error.response.status === 401) {
-        if (location.pathname !== "/login") {
-          navigate("/login", { replace: true });
-        }
+        dispatch(removeUser());
       } else {
         console.log(error);
       }
     } finally {
-      setLoading(false);
+      setAuthChecking(false);
+      setAuthCheckedOnce(true);
     }
   };
 
-  // Whenever path changes, if it's not /login and we have no user, try to fetch user
+  // 1) On first load in ANY tab, check if the user is logged in (cookie-based)
   useEffect(() => {
-    if (location.pathname === "/login") return;
-
-    if (!userData) {
+    if (!authCheckedOnce) {
       fetchUser();
     }
-  }, [location.pathname]);
+  }, [authCheckedOnce]);
 
-  // If user becomes null (e.g. after logout), and we are on a protected route, go to login
+  // 2) Protect routes: if not logged in and not on /login, go to /login
   useEffect(() => {
-    if (!userData && location.pathname !== "/login") {
+    if (!authCheckedOnce) return; // wait until we checked auth at least once
+
+    const isLoginRoute = location.pathname === "/login";
+
+    if (!userData && !isLoginRoute) {
       navigate("/login", { replace: true });
     }
-  }, [userData]);
+  }, [userData, location.pathname, authCheckedOnce, navigate]);
 
-  // Optional: show simple loading while checking auth
-  if (loading && location.pathname !== "/login" && !userData) {
+  // 3) If logged in and somehow on /login, redirect to /feed
+  useEffect(() => {
+    if (!authCheckedOnce) return;
+
+    const isLoginRoute = location.pathname === "/login";
+
+    if (userData && isLoginRoute) {
+      navigate("/feed", { replace: true });
+    }
+  }, [userData, location.pathname, authCheckedOnce, navigate]);
+
+  // Optional: simple loader while checking auth
+  if (!authCheckedOnce && authChecking) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Loading...</p>
