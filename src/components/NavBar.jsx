@@ -1,36 +1,41 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { clearFeed } from '../utils/feedSlice'
-import { removeConnections } from '../utils/connectionSlice'
-import { clearRequest } from '../utils/requestSlice' 
-import { BASE_URL } from '../utils/constent'
-import { useNavigate } from 'react-router-dom'
-import { removeUser } from '../utils/userSlice'
-import logo from '../assets/devtinder-logo.svg'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { clearFeed } from '../utils/feedSlice';
+import { removeConnections } from '../utils/connectionSlice';
+import { clearRequest } from '../utils/requestSlice';
+import { BASE_URL } from '../utils/constent';
+import { removeUser } from '../utils/userSlice';
+import logo from '../assets/devtinder-logo.svg';
+
 const NavBar = () => {
-  const user = useSelector((store)=>store.user)
+  const user = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
-  
-    const handleLogout = async() => {
-        try {
-          const response = await axios.post(BASE_URL+"/logout",
-            {}, 
-            {withCredentials: true}); 
-            dispatch(removeUser());        // clear logged-in user
-            dispatch(clearFeed());         // clear feed data
-            dispatch(removeConnections()); // clear connections
-            dispatch(clearRequest());      // clear requests
-          
-        
-          navigate("/login")
-        } catch (error) {
-          console.log(error)
-        } 
+
+  const [open, setOpen] = useState(false); // controls dropdown open/close
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        BASE_URL + '/logout',
+        {},
+        { withCredentials: true }
+      );
+
+      dispatch(removeUser());        // clear logged-in user
+      dispatch(clearFeed());         // clear feed data
+      dispatch(removeConnections()); // clear connections
+      dispatch(clearRequest());      // clear requests
+
+      setOpen(false);                // close dropdown
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
     }
-  
+  };
 
   // If no user, don't show navbar
   if (!user) return null;
@@ -43,17 +48,20 @@ const NavBar = () => {
         <div className="w-full max-w-6xl mx-auto px-4 flex justify-between items-center">
           {/* Left: Logo */}
           <div className="flex items-center gap-2 flex-1">
-            <Link to="/feed" className="btn btn-ghost text-xl flex items-center gap-2">
+            <Link
+              to="/feed"
+              className="btn btn-ghost text-xl flex items-center gap-2"
+            >
               <img src={logo} alt="devTinder" className="h-8" />
             </Link>
           </div>
 
-          {/* Center: Main nav links (Feed, Connections, Requests) */}
+          {/* Center: Main nav links (Home, Matches, Requests) */}
           <div className="hidden sm:flex gap-4 mr-6">
             <Link
               to="/feed"
               className={`btn btn-ghost btn-sm ${
-                isActive("/feed") ? "btn-active" : ""
+                isActive('/feed') ? 'btn-active' : ''
               }`}
             >
               Home
@@ -62,7 +70,7 @@ const NavBar = () => {
             <Link
               to="/connection"
               className={`btn btn-ghost btn-sm ${
-                isActive("/connection") ? "btn-active" : ""
+                isActive('/connection') ? 'btn-active' : ''
               }`}
             >
               Matches
@@ -71,7 +79,7 @@ const NavBar = () => {
             <Link
               to="/request"
               className={`btn btn-ghost btn-sm ${
-                isActive("/request") ? "btn-active" : ""
+                isActive('/request') ? 'btn-active' : ''
               }`}
             >
               Requests
@@ -87,33 +95,42 @@ const NavBar = () => {
             </p>
 
             {/* Avatar dropdown: only Profile + Logout */}
-            <div className="dropdown dropdown-end">
+            <div
+              className="dropdown dropdown-end"
+              onBlur={() => setOpen(false)}
+            >
               <div
                 tabIndex={0}
                 role="button"
                 className="btn btn-ghost btn-circle avatar"
+                onClick={() => setOpen((prev) => !prev)} // toggle dropdown
               >
                 <div className="w-10 rounded-full">
                   <img alt="user Photo" src={user.photoUrl} />
                 </div>
               </div>
 
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
-              >
-                <li>
-                  <Link to="/profile" className="justify-between">
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <button onClick={handleLogout}>Logout</button>
-                </li>
-              </ul>
+              {open && (
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+                >
+                  <li>
+                    <Link
+                      to="/profile"
+                      className="justify-between"
+                      onClick={() => setOpen(false)} // close on click
+                    >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <button onClick={handleLogout}>Logout</button>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
-
         </div>
       </div>
 
@@ -123,7 +140,7 @@ const NavBar = () => {
           <Link
             to="/feed"
             className={`btn btn-ghost btn-xs ${
-              isActive("/feed") ? "btn-active" : ""
+              isActive('/feed') ? 'btn-active' : ''
             }`}
           >
             Home
@@ -131,15 +148,15 @@ const NavBar = () => {
           <Link
             to="/connection"
             className={`btn btn-ghost btn-xs ${
-              isActive("/connection") ? "btn-active" : ""
+              isActive('/connection') ? 'btn-active' : ''
             }`}
           >
-            Connections
+            Matches
           </Link>
           <Link
             to="/request"
             className={`btn btn-ghost btn-xs ${
-              isActive("/request") ? "btn-active" : ""
+              isActive('/request') ? 'btn-active' : ''
             }`}
           >
             Requests
@@ -149,9 +166,5 @@ const NavBar = () => {
     </div>
   );
 };
-
-
-
-
 
 export default NavBar;
